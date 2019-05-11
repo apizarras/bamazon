@@ -13,4 +13,19 @@ const connection = mysql.createConnection({
 connection.connect(function(err) {
     if(err) throw err;
     console.log("connected as id: "+connection.threadId);
+    startStore();
 }); 
+
+//initiate app with list of products
+function startStore() {
+    displayAllProducts();
+};
+
+function displayAllProducts() {
+    connection.query("SELECT * FROM products", function(err, res) {
+        for(i=0;i<res.length; i++) {
+            console.log(res[i].id + " | " + res[i].product_name + " | " + res[i].deparment_name + " | " + res[i].price + " | " + res[i].stock_quantity);
+            console.log("\n-------------------------------------------\n");
+        };
+    });
+};
