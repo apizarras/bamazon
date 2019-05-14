@@ -72,7 +72,10 @@ function checkInventory(choice) {
                 if(parseInt(quantity)>stockOnhand) {
                     console.log("There isn't enough stock to meet your request. Try again.")
                 } else {
+                    //calculate quantity * price and give the total
+                    //deduct quantity from stock_quantity
                     console.log("Your purchase total...");
+                    //give the user option to start over again/purchase another product
                 }
             });
         });
