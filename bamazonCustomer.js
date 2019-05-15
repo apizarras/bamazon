@@ -65,16 +65,22 @@ function checkInventory(choice) {
                 console.log("this is result of 2nd connection: "+choice);
                 
             //compare requested quantity to instock quantity
-            let quantity = answer.quantity;
-            let stockOnhand = choice.stock_quantity;
+            const quantity = Number(answer.quantity);
+            const stockOnhand = choice.stock_quantity;
+            const price = choice.price;
             console.log("this is onhand: "+stockOnhand);
-            console.log("this is user requested quantity: "+quantity);
-                if(parseInt(quantity)>stockOnhand) {
+            console.log("You have selected a quantity of: "+quantity);
+            console.log(typeof quantity);
+                if(quantity>stockOnhand) {
                     console.log("There isn't enough stock to meet your request. Try again.")
                 } else {
                     //calculate quantity * price and give the total
+                    console.log(quantity);
+                    console.log(price);
+                    const total = quantity * price;
                     //deduct quantity from stock_quantity
-                    console.log("Your purchase total...");
+                    console.log("Your purchase total is: $" + total);
+                    
                     //give the user option to start over again/purchase another product
                 }
             });
