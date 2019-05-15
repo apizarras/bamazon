@@ -80,9 +80,37 @@ function checkInventory(choice) {
                     const total = quantity * price;
                     //deduct quantity from stock_quantity
                     console.log("Your purchase total is: $" + total);
-                    
+                    const newStockOnhand = stockOnhand - quantity;
+                    console.log("Updating inventory count");
+                    const query = connection.query("UPDATE products SET ? WHERE ?",
+                    [
+                        {
+                            stock_quantity: newStockOnhand
+                        },
+                        {
+                            product_name: choice.product_name
+                        }
+                    ],
+                    function(err,res) {
+                        console.log(res.affectedRows + " product updated!\n");
+                    });
+                    console.log(query.sql);
                     //give the user option to start over again/purchase another product
                 }
             });
         });
 };
+
+// function updateInventory(quantity) {
+//     console.log("Updating inventory count");
+//     const query = connection.query("UPDATE products SET ? WHERE ?",
+//     [
+//         {
+//             stock_quantity: newStockOnhand
+//         },
+//         {
+//             product_name: choice
+//         }
+//     ]);
+//     console.log(query.sql);
+// }
