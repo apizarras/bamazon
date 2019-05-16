@@ -62,21 +62,20 @@ function checkInventory(choice) {
             }
         ]).then(function(answer) {
             connection.query("SELECT * FROM products WHERE product_name=?", [choice], function(err, res) {
-                console.log("this is result of 2nd connection: "+choice);
-                
             //compare requested quantity to instock quantity
             const quantity = Number(answer.quantity);
             const stockOnhand = choice.stock_quantity;
             const price = choice.price;
-            console.log("this is onhand: "+stockOnhand);
-            console.log("You have selected a quantity of: "+quantity);
+            // console.log("this is onhand: "+stockOnhand);
+            // console.log("You have selected a quantity of: "+quantity);
             console.log(typeof quantity);
                 if(quantity>stockOnhand) {
-                    console.log("There isn't enough stock to meet your request. Try again.")
+                    console.log("There isn't enough stock to meet your request. Try again.");
+                    startOver();
                 } else {
                     //calculate quantity * price and give the total
-                    console.log(quantity);
-                    console.log(price);
+                    // console.log(quantity);
+                    // console.log(price);
                     const total = quantity * price;
                     //deduct quantity from stock_quantity
                     console.log("Your purchase total is: $" + total);
@@ -96,21 +95,25 @@ function checkInventory(choice) {
                     });
                     console.log(query.sql);
                     //give the user option to start over again/purchase another product
+                    startOver();
                 }
             });
         });
 };
 
-// function updateInventory(quantity) {
-//     console.log("Updating inventory count");
-//     const query = connection.query("UPDATE products SET ? WHERE ?",
-//     [
-//         {
-//             stock_quantity: newStockOnhand
-//         },
-//         {
-//             product_name: choice
-//         }
-//     ]);
-//     console.log(query.sql);
-// }
+function startOver() {
+    inquirer
+        .prompt ([
+            {
+                name: "name",
+                type: "confirm",
+                message: "Would you like to purchase another product?",
+            }
+        ]).then(function(answer) {
+            if(answer.name) {
+                startStore();
+            } else {
+                connection.end();
+            };
+        });
+};
