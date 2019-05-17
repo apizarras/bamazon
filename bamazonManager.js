@@ -64,6 +64,57 @@ function viewLowInventory() {
     });
 };
 
+function addToInventory() {
+    connection.query("SELECT * FROM products", function(err, res) {
+        if(err) throw err;
+        const stockQuantity = res.stock_quantity;
+        console.log(stockQuantity);
+        inquirer
+          .prompt([
+            {
+                name: "choice",
+                type: "rawlist",
+                message: "Please select the product you would like to update.",
+                choices: function() {
+                    const choiceArray = [];
+                    for(i=0;i<res.length;i++) {
+                        choiceArray.push(res[i].product_name)
+                    };
+                    return choiceArray;
+                }
+            },
+            {
+                name: "quantity",
+                type: "input",
+                message: "How many items would you like to add to inventory?"
+            }
+        ]).then(function(answer) {
+            let choice = answer.choice;
+            const newQuantity = answer.quantity + stockQuantity;
+            console.log("\nstock quantity "+newQuantity);
+            console.log("\nquantity "+quantity);
+            for(i=0;i<res.length;i++) {
+                if(res[i].product_name===answer.choice) {
+                    choice = res[i];
+                    console.log(res[i]);
+                    connection.query("UPDATE products SET ? WHERE ?",
+                    [
+                     {
+                         quantity: quantity
+                     }   ,
+                     {
+                         product_name: choice
+                     }
+                    ], function(err, result) {
+                        console.log(result + " products updated\n");
+                    });
+                };
+            };
+        });
+        showAll();
+    }); 
+};
+
 function addNewProduct() {
     inquirer.prompt([
         {
